@@ -23,6 +23,22 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-bot.dialog('/', function (session) {
-    session.send("Hello World");
-});
+bot.dialog('/', [
+    function (session) {
+		builder.Prompts.text(session, "I am eacho bot: say something: ");
+    },
+	function(session, results){
+        session.send(results.response);
+		session.beginDialog('/echo');
+	}
+]);
+
+bot.dialog('/echo', [
+    function (session) {
+		builder.Prompts.text(session, "listening... ");
+    },
+	function(session, results){
+        session.send(results.response);
+		session.beginDialog('/echo');
+	}
+]);
